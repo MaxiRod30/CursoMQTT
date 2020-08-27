@@ -1,0 +1,9 @@
+
+Anteriormente se tiene que habilitar los certificados SSL de VESTA para poder realizar este paso.
+Ubicacion de los certificados: /home/admin/conf/web/
+
+Para realizar este paso es necesario para el servicio de EMQX ./bin/emqx stop
+Para wss
+****
+ln -s /home/admin/conf/web/ssl.tudominio.crt /emqx/etc/certs/cert.pem
+ln -s /home/admin/conf/web/ssl.tudominio.key /emqx/etc/certs/key.pem

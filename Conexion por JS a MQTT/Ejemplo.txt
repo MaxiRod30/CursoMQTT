@@ -1,0 +1,56 @@
+<!-- ******************PARA CONECTAR NUESTRO NAVEGADOR A TRAVES DE JS ******************-->
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script type="text/javascript">
+  // connection option
+  const options = {
+        clean: true, // retain session
+        connectTimeout: 4000, // Timeout period
+        // Authentication information
+        clientId: 'emqx',
+        username: 'web_client',
+        password: 'Q1w2e3r4t5',
+        keepalive: 60,
+  }
+
+  // Connect string, and specify the connection method by the protocol
+  // ws Unencrypted WebSocket connection
+  // wss Encrypted WebSocket connection
+  // mqtt Unencrypted TCP connection
+  // mqtts Encrypted TCP connection
+  // wxs WeChat applet connection
+  // alis Alipay applet connection
+  //conexion por el puerto inseguro: const connectUrl = 'ws://http://iotdarkmaxvs.ga:8093/mqtt'
+  const connectUrl = 'wss://iotdarkmaxvs.ga:8094/mqtt'
+  const client = mqtt.connect(connectUrl, options)
+
+  client.on('connect', () => {
+      console.log('Conecto correctamente MQTT, con certificados SSL!!!')
+
+      //Para escuchar un topico
+      client.subscribe('commands', {qos:0}, (error) => {
+        if(!error){
+          console.log('Suscripcion exitosa')
+        }else{
+          console.log('Error en la suscripcion!')
+        }
+      })
+      //Para ver el mensaje que llega del topico
+      client.on('message', (topic, message) => {
+          console.log('El mensaje es: ', topic, message.toString())
+        })
+      //Para enviar un mensaje bajo un topico
+      client.publish('fabrica','Esto es un verdadero exito!!!', (error) => {
+          console.log(error || 'Se conecto y envio el mensaje correctamente!!!')
+        })
+
+  })
+
+  client.on('reconnect', (error) => {
+      console.log('reconnecting:', error)
+  })
+
+  client.on('error', (error) => {
+      console.log('Connection failed:', error)
+  })
+
+</script>
